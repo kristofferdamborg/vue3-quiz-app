@@ -4,7 +4,7 @@ export enum QuizDifficulty {
   Hard = 'hard'
 }
 
-export interface QuizQuestion {
+export interface OPENTDBQuizQuestion {
   category: string
   correct_answer: string
   difficulty: QuizDifficulty
@@ -13,11 +13,11 @@ export interface QuizQuestion {
   type: string
 }
 
-export interface StoreQuizQuestion extends QuizQuestion {
-  answers?: string[]
-  selectedAnswer?: string
+export interface QuizQuestion extends OPENTDBQuizQuestion {
+  answers: string[]
+  selectedAnswer: string
 }
 
 export interface Quiz {
-  questions: StoreQuizQuestion[]
+  questions: QuizQuestion[]
 }

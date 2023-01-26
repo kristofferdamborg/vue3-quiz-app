@@ -14,6 +14,7 @@
           :disabled="question.selectedAnswer !== ''"
           @click="selectAnswer(answer)"
           @keydown.enter="selectAnswer(answer)"
+          @keydown.space="selectAnswer(answer)"
         >
           <span class="sr-only">Answer:</span> <span v-html="answer" />
         </MultipleChoiceCheckbox>
@@ -24,10 +25,10 @@
 
 <script lang="ts" setup>
 import MultipleChoiceCheckbox from '@/components/MultipleChoiceCheckbox.vue'
-import { StoreQuizQuestion } from '@/types/quiz'
+import { QuizQuestion } from '@/types/quiz'
 
 interface Props {
-  question: StoreQuizQuestion
+  question: QuizQuestion
   index: number
 }
 

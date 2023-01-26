@@ -1,8 +1,7 @@
 import { defineStore } from 'pinia'
 import { QuizDifficulty } from '@/types/quiz'
-import type { Quiz, QuizQuestion, StoreQuizQuestion } from '@/types/quiz'
+import type { Quiz, OPENTDBQuizQuestion, QuizQuestion } from '@/types/quiz'
 import { getQuiz } from '@/api/quiz'
-import { useAuthStore } from '@/stores/auth'
 import shuffle from 'lodash/shuffle'
 
 interface State {
@@ -25,11 +24,9 @@ export const useQuizStore = defineStore('quiz', {
         return storedQuiz
       }
 
-      const authStore = useAuthStore()
+      const { data } = await getQuiz(difficulty)
 
-      const { data } = await getQuiz(difficulty, authStore.sessionToken as string)
-
-      const questions = data.results.map((q: QuizQuestion) => ({
+      const questions = data.results.map((q: OPENTDBQuizQuestion) => ({
         ...q,
         answers: shuffle([...q.incorrect_answers, q.correct_answer]),
         selectedAnswer: ''
@@ -53,7 +50,7 @@ export const useQuizStore = defineStore('quiz', {
 
       if (!quiz) return
 
-      quiz.questions = quiz.questions.map((q: StoreQuizQuestion) => ({
+      quiz.questions = quiz.questions.map((q: QuizQuestion) => ({
         ...q,
         selectedAnswer: ''
       }))
@@ -61,9 +58,7 @@ export const useQuizStore = defineStore('quiz', {
   },
   getters: {
     getQuizQuestions: (state) => (quizKey: QuizDifficulty) => {
-      const questions = state.quizzes[quizKey]?.questions ?? []
-
-      return questions
+      return state.quizzes[quizKey]?.questions ?? []
     }
   },
   persist: true
